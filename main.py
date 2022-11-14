@@ -30,6 +30,11 @@ speed = 5
 direction_x = 1
 direction_y = 1
 
+
+comic_sans30 = pg.font.SysFont("Ferrara-Osf", 30)
+print(mr_pump.life)
+
+
 FPS = 160
 clock = pg.time.Clock()
 
@@ -49,10 +54,13 @@ while playing: # game loop
 
     hits = pg.sprite.spritecollide(mr_pump, enemy_group, True)
 
+    text_player_hp = comic_sans30.render(str(mr_pump.life), False, (RED))
+    screen.blit(text_player_hp, (10, 10))
 
     # lag nye fiender
-    if len(enemy_group) > 3:
+    if len(enemy_group) < 5:
         slimey = slime()
+        all_sprites.add(slimey)
         enemy_group.add(slimey)
 
 

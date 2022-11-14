@@ -22,6 +22,7 @@ class player(pg.sprite.Sprite):
         self.pos = vec(100 , 100)
         self.rect.center = self.pos
         self.speed = 3
+        self.life = 100
 
 
     def update(self):
@@ -53,7 +54,7 @@ class slime(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.image = Slime_img
         self.rect = self.image.get_rect() # henter self.image sin størrelse og lager en hitbox.
-        self.pos = vec(400 , -100)
+        self.pos = vec(randint (0,800) , 0)
         self.rect.center = self.pos
         self.speed = 6
 
