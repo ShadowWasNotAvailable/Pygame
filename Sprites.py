@@ -19,10 +19,11 @@ class player(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.image = player_front
         self.rect = self.image.get_rect() # henter self.image sin størrelse og lager en hitbox.
-        self.pos = vec(100 , 100)
+        self.pos = vec(400 , 300)
         self.rect.center = self.pos
         self.speed = 3
         self.life = 100
+        self.energy = 100
 
 
     def update(self):
@@ -45,6 +46,28 @@ class player(pg.sprite.Sprite):
         if keys[pg.K_d]:
             self.pos.x += self.speed
             self.image = player_right
+        
+        if keys[pg.K_LSHIFT] is True:
+            self.speed = 5
+            self.energy -= 1
+
+        
+        if keys[pg.K_LSHIFT] is False:
+            self.speed = 3
+            self.energy += 1
+        
+        if self.energy < 1:
+            self.speed = 3
+
+        if self.energy > 100:
+            self.energy = 100
+        
+        if self.energy < 0:
+            self.energy = 0
+            
+        
+        print (self.energy)
+            
 
 
 
