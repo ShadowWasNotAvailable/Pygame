@@ -44,10 +44,10 @@ class game():
         self.all_sprites = pg.sprite.Group()
         self.enemy_group = pg.sprite.Group()
 
-        self.mr_pump = player()
+        self.mr_pump = player(self)
         self.slimey = slime()
 
-        self.all_sprites.add(self.mr_pump , self.slimey)
+        self.all_sprites.add(self.slimey)
         self.enemy_group.add(self.slimey)
 
         self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
@@ -58,12 +58,12 @@ class game():
         playing = True
         while playing: # game loop
             self.clock.tick(self.FPS)
+            #print("frame game loop")
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     playing=False
             self.screen.blit(self.bg, (-1,-1))
 
-            self.all_sprites.update() # kjører update til alle sprites i all_sprites.
 
         
             hits = pg.sprite.spritecollide(self.mr_pump, self.enemy_group, True)
@@ -86,11 +86,9 @@ class game():
                 self.all_sprites.add(slimey)
                 self.enemy_group.add(slimey)
 
+            self.all_sprites.update() # kjører update til alle sprites i all_sprites.
 
             self.all_sprites.draw(self.screen)
-            
-
-            
             pg.display.update()
 
 g = game() # her lages game classen, also starter spill.
