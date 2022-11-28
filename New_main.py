@@ -13,6 +13,8 @@ from Sprites import *
 class game():
     def __init__(self): 
         pg.init()
+        mixer.init()
+
         mixer.music.load("happy.mp3")
         mixer.music.set_volume(1)
         self.WHITE = (255,255,255)
@@ -20,17 +22,19 @@ class game():
         self.RED = (255,0,0)
         self.GREEN = (0,255,0)
         self.BLUE = (0,0,255)
+
         self.width = 800
         self.height = 600
-        self.comic_sans30 = pg.font.SysFont("Ferrara-Osf", 30)
+
+        self.text_font = pg.font.SysFont("Arial", 30)
+
         self.screen = pg.display.set_mode((self.width,self.height))
         self.bg = pg.image.load("tenor.gif")
         self.bg = pg.transform.scale (self.bg , (801,601))
+
         self.FPS = 160
         self.clock = pg.time.Clock()
-        self.new
-
-        
+        self.new()
 
 
 
@@ -40,14 +44,15 @@ class game():
         self.all_sprites = pg.sprite.Group()
         self.enemy_group = pg.sprite.Group()
 
-        self.i = 0
-
         self.mr_pump = player()
         self.slimey = slime()
+
         self.all_sprites.add(self.mr_pump , self.slimey)
         self.enemy_group.add(self.slimey)
 
-        self.run
+        self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
+        self.text_energy = self.text_font.render(str(self.mr_pump.energy) + " Energy", False, (self.RED))
+        self.run()
 
     def run(self):
         playing = True
@@ -58,34 +63,37 @@ class game():
                     playing=False
             self.screen.blit(self.bg, (-1,-1))
 
-        self.all_sprites.update() # kjører update til alle sprites i all_sprites.
+            self.all_sprites.update() # kjører update til alle sprites i all_sprites.
 
         
-        hits = pg.sprite.spritecollide(self.mr_pump, self.enemy_group, True)
-        
-        if hits:
-            self.mr_pump.life -= 10
-        
-        if self.mr_pump.life < 1:
-            self.mr_pump.life = 100
+            hits = pg.sprite.spritecollide(self.mr_pump, self.enemy_group, True)
+            
+            if hits:
+                self.mr_pump.life -= 10
+            
+            if self.mr_pump.life < 1:
+                self.mr_pump.life = 100
+                playing = False
+
+            self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
+            self.screen.blit(self.text_player_hp, (10, 10))
+            self.text_energy = self.text_font.render(str(self.mr_pump.energy) + " Energy", False, (self.RED))
+            self.screen.blit(self.text_energy, (10, 40))
+
+                # lag nye fiender
+            if len(self.enemy_group) < 5:
+                slimey = slime()
+                self.all_sprites.add(slimey)
+                self.enemy_group.add(slimey)
 
 
-        text_player_hp = self.comic_sans30.render(str(self.mr_pump.life) + " Health", False, (self.RED))
-        self.screen.blit(text_player_hp, (10, 10))
+            self.all_sprites.draw(self.screen)
+            
 
-            # lag nye fiender
-        if len(self.enemy_group) < 5:
-            slimey = slime()
-            self.all_sprites.add(slimey)
-            self.enemy_group.add(slimey)
+            
+            pg.display.update()
 
+g = game() # her lages game classen, also starter spill.
 
-        self.all_sprites.draw(self.screen)
-        
-
-
-        pg.display.update()
-
-g = game # her øages game classen, also starter spillet.
 
 
