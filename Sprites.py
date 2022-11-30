@@ -10,7 +10,8 @@ player_left = pg.image.load ("pump-left.png")
 player_left = pg.transform.scale (player_left , (100,150)) # endrer størrelse på bilde.
 player_back = pg.image.load ("pump-back.png")
 player_back = pg.transform.scale (player_back , (100,150)) # endrer størrelse på bilde.
-
+player_damage = pg.image.load ("pump-damage.png")
+player_damage = pg.transform.scale (player_damage , (100,150)) # endrer størrelse på bilde.
 
 
 Slime_img = pg.image.load ("slime.g.png")
@@ -100,6 +101,11 @@ class slime(pg.sprite.Sprite):
     def update(self):
         self.rect.center = self.pos
         self.pos.y += self.speed
+        
+        if self.pos.y > 800:
+            self.pos.y = -5
+            self.pos.x = randint (0,800)
+
 
 class Ranged_attack(pg.sprite.Sprite):
     def __init__(self, game, x ,y, direction_x, direction_y):

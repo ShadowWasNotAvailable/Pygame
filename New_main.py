@@ -70,10 +70,11 @@ class game():
             
             if hits:
                 self.mr_pump.life -= 10
+                self.mr_pump.image = player_damage
             
             if self.mr_pump.life < 1:
                 self.mr_pump.life = 100
-                playing = False
+                playineg = False
 
             self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
             self.screen.blit(self.text_player_hp, (10, 10))
