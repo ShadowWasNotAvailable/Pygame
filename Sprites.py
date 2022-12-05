@@ -144,5 +144,22 @@ class Ranged_attack(pg.sprite.Sprite):
         self.move_vector = self.move_to - self.pos  # finner "forskjellen" mellom self.pos og posisjon til musepeker
         self.pos += self.move_vector.normalize() * self.speed  # flytter self.pos litt mot musepeker
         self.rect.center = self.pos
-        
+
+
+
+
+class Food(pg.sprite.Sprite):
+    def __init__(self, game):
+        self.groups = game.all_sprites , game.food_items
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = player_front
+        self.rect = self.image.get_rect() # henter self.image sin størrelse og lager en hitbox.
+        self.pos = vec(400 , 300)
+        self.rect.center = self.pos
+
+    def update(self):
+        self.rect.center = self.pos
+
+
 

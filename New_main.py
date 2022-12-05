@@ -43,12 +43,15 @@ class game():
         mixer.music.play(loops= -1)
         self.all_sprites = pg.sprite.Group()
         self.enemy_group = pg.sprite.Group()
+        self.food_items = pg.sprite.Group()
 
         self.mr_pump = player(self)
         self.slimey = slime()
+        self.eat = Food()
 
         self.all_sprites.add(self.slimey)
         self.enemy_group.add(self.slimey)
+        self.food_items.add(self.eat)
 
         self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
         self.text_energy = self.text_font.render(str(self.mr_pump.energy) + " Energy", False, (self.RED))
@@ -68,13 +71,20 @@ class game():
         
             hits = pg.sprite.spritecollide(self.mr_pump, self.enemy_group, True)
             
+
+            food_hit = pg.sprite.spritecollide(self.mr_pump, self.food_items, True)
+            if food_hit:
+                self.mr_pump.life += 10
+
+
+
             if hits:
                 self.mr_pump.life -= 10
                 self.mr_pump.image = player_damage
             
             if self.mr_pump.life < 1:
                 self.mr_pump.life = 100
-                playineg = False
+                playing = False
 
             self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
             self.screen.blit(self.text_player_hp, (10, 10))
@@ -86,6 +96,11 @@ class game():
                 slimey = slime()
                 self.all_sprites.add(slimey)
                 self.enemy_group.add(slimey)
+
+            if len(self.food_items) < 1:
+                foods = Food()
+                self.all_sprites.add(foods)
+                self.food_items.add(foods)
 
             self.all_sprites.update() # kjører update til alle sprites i all_sprites.
 
