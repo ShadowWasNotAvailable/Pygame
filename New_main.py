@@ -28,7 +28,7 @@ class game():
 
         self.text_font = pg.font.SysFont("Arial", 30)
 
-        self.screen = pg.display.set_mode((self.width,self.height))
+        self.screen = pg  .display.set_mode((self.width,self.height))
         self.bg = pg.image.load("tenor.gif")
         self.bg = pg.transform.scale (self.bg , (801,601))
 
@@ -43,15 +43,16 @@ class game():
         mixer.music.play(loops= -1)
         self.all_sprites = pg.sprite.Group()
         self.enemy_group = pg.sprite.Group()
-        self.food_items = pg.sprite.Group()
+        self.projectiles_group = pg.sprite.Group()
+        #self.food_items = pg.sprite.Group()
 
         self.mr_pump = player(self)
         self.slimey = slime()
-        self.eat = Food()
+        #self.eat = Food()
 
         self.all_sprites.add(self.slimey)
         self.enemy_group.add(self.slimey)
-        self.food_items.add(self.eat)
+        #self.food_items.add(self.eat)
 
         self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
         self.text_energy = self.text_font.render(str(self.mr_pump.energy) + " Energy", False, (self.RED))
@@ -72,9 +73,9 @@ class game():
             hits = pg.sprite.spritecollide(self.mr_pump, self.enemy_group, True)
             
 
-            food_hit = pg.sprite.spritecollide(self.mr_pump, self.food_items, True)
-            if food_hit:
-                self.mr_pump.life += 10
+            #food_hit = pg.sprite.spritecollide(self.mr_pump, self.food_items, True)
+            #if food_hit:
+                #self.mr_pump.life += 10
 
 
 
@@ -97,10 +98,10 @@ class game():
                 self.all_sprites.add(slimey)
                 self.enemy_group.add(slimey)
 
-            if len(self.food_items) < 1:
-                foods = Food()
-                self.all_sprites.add(foods)
-                self.food_items.add(foods)
+            #if len(self.food_items) < 1:
+                #foods = Food()
+                #self.all_sprites.add(foods)
+                #self.food_items.add(foods)
 
             self.all_sprites.update() # kjører update til alle sprites i all_sprites.
 

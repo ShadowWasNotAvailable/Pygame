@@ -28,6 +28,9 @@ class player(pg.sprite.Sprite):
         self.speed = 3
         self.life = 100
         self.energy = 100
+        self.range_direction_x = 1
+        self.range_direction_y = 1
+        self.pew_speed = 4
 
 
     def update(self):
@@ -38,7 +41,7 @@ class player(pg.sprite.Sprite):
         if keys[pg.K_w]:
             self.pos.y -= self.speed
             self.image = player_back
-            print("up")
+     
 
         if keys[pg.K_s]:
             self.pos.y += self.speed
@@ -76,10 +79,18 @@ class player(pg.sprite.Sprite):
         keys = pg.key.get_pressed()
         if keys[pg.K_SPACE]:
             self.attack() # starter attack funksjon hvis vi klikker SPACE knapp
+            if keys[pg.K_UP]:
+                self.attack_direction_y -= self.pew_speed
+            if keys[pg.K_DOWN]:
+                self.attack_direction_y = self.pew_speed
+            if keys[pg.K_LEFT]:
+                self.attack_direction_x -= self.pew_speed            
+            if keys[pg.K_RIGHT]:
+                self.attack_direction_x = self.pew_speed
  
     def attack(self):
-        attack_object = Ranged_attack(self.game, self.pos.x, self.pos.y, self.direction_x, self.direction_y) 
-
+        attack_object = Ranged_attack(self.game, self.pos.x, self.pos.y, self.range_direction_x, self.range_direction_y) 
+         
 
 
         
@@ -109,57 +120,45 @@ class slime(pg.sprite.Sprite):
 
 class Ranged_attack(pg.sprite.Sprite):
     def __init__(self, game, x ,y, direction_x, direction_y):
-        self.groups = game.all_sprites, game.projectiles_grp # legger til i sprite gruppe
+        self.groups = game.all_sprites, game.projectiles_group # legger til i sprite gruppe
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface([50,50])
         self.image.fill((255,0,0))
         self.rect = self.image.get_rect()
         self.pos = vec(x, y) # start posisjon
-        self.direction_x = direction_x
-        self.direction_y = direction_y
+        self.range_direction_x = direction_x
+        self.range_direction_y = direction_y
         self.rect.center = self.pos
-        self.speed = 4
 
 
     def update(self):
         self.rect.center = self.pos
-        self.pos.y += self.speed
         self.rect.center = self.pos
-        self.pos.x += self.direction_x
-        self.pos.y += self.direction_y
+        self.pos.x += self.range_direction_x
+        self.pos.y += self.range_direction_y
 
 
-        if self.pos.y > 700:
-            
-            self.pos.y = -100
-            
-            self.pos.x = randint (0,800)
-
-
-
-
-
-        self.move_to = vec(pg.mouse.get_pos())
-        self.move_vector = self.move_to - self.pos  # finner "forskjellen" mellom self.pos og posisjon til musepeker
-        self.pos += self.move_vector.normalize() * self.speed  # flytter self.pos litt mot musepeker
-        self.rect.center = self.pos
+        #self.move_to = vec(pg.mouse.get_pos())
+       # self.move_vector = self.move_to - self.pos  # finner "forskjellen" mellom self.pos og posisjon til musepeker
+       # self.pos += self.move_vector.normalize() * self.pew_speed  # flytter self.pos litt mot musepeker
+        #self.rect.center = self.pos
 
 
 
 
-class Food(pg.sprite.Sprite):
-    def __init__(self, game):
-        self.groups = game.all_sprites , game.food_items
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = player_front
-        self.rect = self.image.get_rect() # henter self.image sin størrelse og lager en hitbox.
-        self.pos = vec(400 , 300)
-        self.rect.center = self.pos
+#class Food(pg.sprite.Sprite):
+    #def __init__(self, game):
+        #self.groups = game.all_sprites , game.food_items
+        #pg.sprite.Sprite.__init__(self, self.groups)
+        #self.game = game
+        #self.image = player_front
+        #self.rect = self.image.get_rect() # henter self.image sin størrelse og lager en hitbox.
+        #self.pos = vec(400 , 300)
+        #self.rect.center = self.pos
 
-    def update(self):
-        self.rect.center = self.pos
+    #def update(self):
+        #self.rect.center = self.pos#
 
 
 
