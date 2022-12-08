@@ -31,6 +31,8 @@ class player(pg.sprite.Sprite):
         self.range_direction_x = 1
         self.range_direction_y = 1
         self.pew_speed = 4
+        self.last_healing = 0
+        self.healing_timer = 500
 
 
     def update(self):
@@ -63,6 +65,9 @@ class player(pg.sprite.Sprite):
         if keys[pg.K_LSHIFT] is False:
             self.speed = 3
             self.energy += 1
+
+        if keys[pg.K_h]:
+            self.healing
         
         if self.energy < 1:
             self.speed = 3
@@ -72,8 +77,12 @@ class player(pg.sprite.Sprite):
         
         if self.energy < 0:
             self.energy = 0
-            
-        print (self.energy)
+
+        if self.last_healing > 500:
+            self.last_healing = 500
+        
+        if self.last_healing < 500:
+            self.last_healing += 1
             
     
         keys = pg.key.get_pressed()
@@ -89,7 +98,18 @@ class player(pg.sprite.Sprite):
                 self.attack_direction_x = self.pew_speed
  
     def attack(self):
-        attack_object = Ranged_attack(self.game, self.pos.x, self.pos.y, self.range_direction_x, self.range_direction_y) 
+        attack_object = Ranged_attack(self.game, self.pos.x, self.pos.y, self.range_direction_x, self.range_direction_y)
+
+
+    def healing(self):
+        now = pg.time.get_ticks()
+        if now - self.last_healing > self.healing_timer:
+            self.life += 10
+            print ("HEAL BROTHER!")
+            self.last_healing = pg.time.get_ticks()
+
+        if now - self.last_healing < self.healing_timer:
+            print ("NOT READY YET SIR!")
          
 
 
@@ -143,6 +163,9 @@ class Ranged_attack(pg.sprite.Sprite):
        # self.move_vector = self.move_to - self.pos  # finner "forskjellen" mellom self.pos og posisjon til musepeker
        # self.pos += self.move_vector.normalize() * self.pew_speed  # flytter self.pos litt mot musepeker
         #self.rect.center = self.pos
+
+
+    
 
 
 
