@@ -12,6 +12,8 @@ player_back = pg.image.load ("pump-back.png")
 player_back = pg.transform.scale (player_back , (100,150)) # endrer størrelse på bilde.
 player_damage = pg.image.load ("pump-damage.png")
 player_damage = pg.transform.scale (player_damage , (100,150)) # endrer størrelse på bilde.
+pew_img = pg.image.load("Pew.png")
+pew_img = pg.transform.scale (pew_img , (50,50)) # endrer størrelse på bilde.
 
 
 Slime_img = pg.image.load ("slime.g.png")
@@ -33,6 +35,7 @@ class player(pg.sprite.Sprite):
         self.pew_speed = 4
         self.last_healing = 0
         self.healing_timer = 500
+        self.healing_count = 500
 
 
     def update(self):
@@ -67,7 +70,7 @@ class player(pg.sprite.Sprite):
             self.energy += 1
 
         if keys[pg.K_h]:
-            self.healing
+            self.healing()
         
         if self.energy < 1:
             self.speed = 3
@@ -78,13 +81,7 @@ class player(pg.sprite.Sprite):
         if self.energy < 0:
             self.energy = 0
 
-        if self.last_healing > 500:
-            self.last_healing = 500
-        
-        if self.last_healing < 500:
-            self.last_healing += 1
-            
-    
+      
         keys = pg.key.get_pressed()
         if keys[pg.K_SPACE]:
             self.attack() # starter attack funksjon hvis vi klikker SPACE knapp
@@ -96,20 +93,27 @@ class player(pg.sprite.Sprite):
                 self.attack_direction_x -= self.pew_speed            
             if keys[pg.K_RIGHT]:
                 self.attack_direction_x = self.pew_speed
- 
+        
+        now = pg.time.get_ticks()
+        self.healing_count = now - self.last_healing
+        if self.healing_count > 500:
+            self.healing_count = ("Healing is ready")
+
     def attack(self):
-        attack_object = Ranged_attack(self.game, self.pos.x, self.pos.y, self.range_direction_x, self.range_direction_y)
+        Ranged_attack(self.game, self.pos.x, self.pos.y)
 
 
     def healing(self):
         now = pg.time.get_ticks()
         if now - self.last_healing > self.healing_timer:
             self.life += 10
-            print ("HEAL BROTHER!")
+            self.healing_count = 0
+            print ("HEAL!")
             self.last_healing = pg.time.get_ticks()
 
-        if now - self.last_healing < self.healing_timer:
-            print ("NOT READY YET SIR!")
+        else:
+            print(now - self.last_healing)
+            print ("NOT READY YET!")
          
 
 
@@ -139,49 +143,30 @@ class slime(pg.sprite.Sprite):
 
 
 class Ranged_attack(pg.sprite.Sprite):
-    def __init__(self, game, x ,y, direction_x, direction_y):
+    def __init__(self, game, x ,y):
         self.groups = game.all_sprites, game.projectiles_group # legger til i sprite gruppe
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface([50,50])
-        self.image.fill((255,0,0))
+        self.image = pew_img
         self.rect = self.image.get_rect()
-        self.pos = vec(x, y) # start posisjon
-        self.range_direction_x = direction_x
-        self.range_direction_y = direction_y
+        self.pos = vec(x+22, y+27) # start posisjon
+        self.rect.center = self.pos
+        self.pew_speed = 10
+        
+        self.move_to = vec(pg.mouse.get_pos())
+        self.move_vector = self.move_to - self.pos  # finner "forskjellen" mellom self.pos og posisjon til musepeker
         self.rect.center = self.pos
 
 
     def update(self):
         self.rect.center = self.pos
-        self.rect.center = self.pos
-        self.pos.x += self.range_direction_x
-        self.pos.y += self.range_direction_y
 
-
-        #self.move_to = vec(pg.mouse.get_pos())
-       # self.move_vector = self.move_to - self.pos  # finner "forskjellen" mellom self.pos og posisjon til musepeker
-       # self.pos += self.move_vector.normalize() * self.pew_speed  # flytter self.pos litt mot musepeker
-        #self.rect.center = self.pos
-
+        self.pos += self.move_vector.normalize() * self.pew_speed  # flytter self.pos litt mot musepeker
 
     
 
 
 
-
-#class Food(pg.sprite.Sprite):
-    #def __init__(self, game):
-        #self.groups = game.all_sprites , game.food_items
-        #pg.sprite.Sprite.__init__(self, self.groups)
-        #self.game = game
-        #self.image = player_front
-        #self.rect = self.image.get_rect() # henter self.image sin størrelse og lager en hitbox.
-        #self.pos = vec(400 , 300)
-        #self.rect.center = self.pos
-
-    #def update(self):
-        #self.rect.center = self.pos#
 
 
 
