@@ -36,6 +36,7 @@ class player(pg.sprite.Sprite):
         self.last_healing = 0
         self.healing_timer = 500
         self.healing_count = 500
+        self.score = 0
 
 
     def update(self):
@@ -81,6 +82,19 @@ class player(pg.sprite.Sprite):
         if self.energy < 0:
             self.energy = 0
 
+        if self.pos.x > 750:
+            self.pos.x = 750
+        if self.pos.y > 550:
+            self.pos.y = 550
+
+        if self.pos.x < 50:
+            self.pos.x = 50
+        if self.pos.y < 50:
+            self.pos.y = 50
+
+        
+
+        
       
         keys = pg.key.get_pressed()
         if keys[pg.K_SPACE]:
@@ -98,6 +112,8 @@ class player(pg.sprite.Sprite):
         self.healing_count = now - self.last_healing
         if self.healing_count > 500:
             self.healing_count = ("Healing is ready")
+
+
 
     def attack(self):
         Ranged_attack(self.game, self.pos.x, self.pos.y)
@@ -162,6 +178,15 @@ class Ranged_attack(pg.sprite.Sprite):
         self.rect.center = self.pos
 
         self.pos += self.move_vector.normalize() * self.pew_speed  # flytter self.pos litt mot musepeker
+
+        if self.pos.x > 800:
+            self.kill
+        if self.pos.y > 600:
+            self.kill
+        if self.pos.x < 0:
+            self.kill
+        if self.pos.y < 0:
+            self.kill
 
     
 

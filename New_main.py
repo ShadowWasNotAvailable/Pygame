@@ -28,8 +28,8 @@ class game():
 
         self.text_font = pg.font.SysFont("Arial", 30)
 
-        self.screen = pg  .display.set_mode((self.width,self.height))
-        self.bg = pg.image.load("tenor.gif")
+        self.screen = pg.display.set_mode((self.width,self.height))
+        self.bg = pg.image.load("Grass.png")
         self.bg = pg.transform.scale (self.bg , (801,601))
         self.FPS = 160
         self.clock = pg.time.Clock()
@@ -82,21 +82,27 @@ class game():
                 self.mr_pump.life -= 10
                 self.mr_pump.image = player_damage
                           
-
+            if self.perojectiles_hit:
+                self.mr_pump.score += 1
 
             if self.mr_pump.life < 1:
                 self.mr_pump.life = 100
-                playingh = False
+                playinge = False
+
+            if self.mr_pump.life > 100:
+                self.mr_pump.life = 100
 
             self.text_player_hp = self.text_font.render(str(self.mr_pump.life) + " Health", False, (self.RED))
             self.screen.blit(self.text_player_hp, (10, 10))
             self.text_energy = self.text_font.render(str(self.mr_pump.energy) + " Energy", False, (self.RED))
             self.screen.blit(self.text_energy, (10, 40))
+            self.text_score = self.text_font.render(str(self.mr_pump.score) + " Score",  False, (self.RED))
+            self.screen.blit(self.text_score, (10, 70))
             self.text_healing_timer = self.text_font.render(str(self.mr_pump.healing_count), False, (self.RED))
-            self.screen.blit(self.text_healing_timer, (10, 70))
+            self.screen.blit(self.text_healing_timer, (10, 100))
 
                 # lag nye fiender
-            if len(self.enemy_group) < 5:
+            if len(self.enemy_group) < 15:
                 slimey = slime()
                 self.all_sprites.add(slimey)
                 self.enemy_group.add(slimey)
