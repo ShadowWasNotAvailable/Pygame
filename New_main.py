@@ -22,6 +22,7 @@ class game():
         self.RED = (255,0,0)
         self.GREEN = (0,255,0)
         self.BLUE = (0,0,255)
+        self.CRIMSON = (153,0,0)
 
         self.width = 800
         self.height = 600
@@ -31,6 +32,8 @@ class game():
         self.screen = pg.display.set_mode((self.width,self.height))
         self.bg = pg.image.load("Grass.png")
         self.bg = pg.transform.scale (self.bg , (801,601))
+        self.skull = pg.image.load ("Skull.png")
+        self.skull = pg.transform.scale (self.skull , (500,500))
         self.FPS = 160
         self.clock = pg.time.Clock()
         self.new()
@@ -87,7 +90,8 @@ class game():
 
             if self.mr_pump.life < 1:
                 self.mr_pump.life = 100
-                playinge = False
+                self.game_over()
+                playing = False
 
             if self.mr_pump.life > 100:
                 self.mr_pump.life = 100
@@ -112,6 +116,31 @@ class game():
 
             self.all_sprites.draw(self.screen)
             pg.display.update()
+
+    def game_over(self):
+ 
+        self.game_over = True
+        while self.game_over:
+            self.clock.tick(self.FPS)
+            self.game_over_text = self.text_font.render("Game over, click R to restart", False, (self.CRIMSON))
+            
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.game_over = False
+                    pg.quit()
+
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_r:  # om vi clicker på R, avslutter vi game over loop, og går derett til self.new() som ligger etter game_over loop
+                        self.game_over = False  
+
+            self.screen.fill(self.BLACK)
+            self.screen.blit(self.game_over_text,(250,500))  # tegner tekst på skjerm. 
+            self.screen.blit(self.skull, (170,30))
+
+            pg.display.update()
+        
+        self.new()
+ 
 
 g = game() # her lages game classen, also starter spill.
 

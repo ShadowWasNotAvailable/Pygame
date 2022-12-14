@@ -16,6 +16,7 @@ pew_img = pg.image.load("Pew.png")
 pew_img = pg.transform.scale (pew_img , (50,50)) # endrer størrelse på bilde.
 
 
+
 Slime_img = pg.image.load ("slime.g.png")
 
 class player(pg.sprite.Sprite):
@@ -72,6 +73,7 @@ class player(pg.sprite.Sprite):
 
         if keys[pg.K_h]:
             self.healing()
+        
         
         if self.energy < 1:
             self.speed = 3
