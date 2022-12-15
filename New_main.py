@@ -15,7 +15,6 @@ class game():
         pg.init()
         mixer.init()
 
-        mixer.music.load("happy.mp3")
         mixer.music.set_volume(1)
         self.WHITE = (255,255,255)
         self.BLACK = (0,0,0)
@@ -42,6 +41,7 @@ class game():
 
 
     def new(self): # ny runde
+        mixer.music.load("happy.mp3")
         mixer.music.play(loops= -1)
         self.all_sprites = pg.sprite.Group()
         self.enemy_group = pg.sprite.Group()
@@ -90,7 +90,8 @@ class game():
 
             if self.mr_pump.life < 1:
                 self.mr_pump.life = 100
-                self.game_over()
+                mixer.music.stop()
+                self.game_over_loop()
                 playing = False
 
             if self.mr_pump.life > 100:
@@ -102,7 +103,7 @@ class game():
             self.screen.blit(self.text_energy, (10, 40))
             self.text_score = self.text_font.render(str(self.mr_pump.score) + " Score",  False, (self.RED))
             self.screen.blit(self.text_score, (10, 70))
-            self.text_healing_timer = self.text_font.render(str(self.mr_pump.healing_count), False, (self.RED))
+            self.text_healing_timer = self.text_font.render(str(self.mr_pump.healing_count_text), False, (self.RED))
             self.screen.blit(self.text_healing_timer, (10, 100))
 
                 # lag nye fiender
@@ -117,13 +118,16 @@ class game():
             self.all_sprites.draw(self.screen)
             pg.display.update()
 
-    def game_over(self):
- 
+    def game_over_loop(self):
+        
+        mixer.music.load("laugh.mp3")
+        mixer.music.play()
         self.game_over = True
         while self.game_over:
             self.clock.tick(self.FPS)
             self.game_over_text = self.text_font.render("Game over, click R to restart", False, (self.CRIMSON))
             
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.game_over = False
@@ -131,7 +135,8 @@ class game():
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_r:  # om vi clicker på R, avslutter vi game over loop, og går derett til self.new() som ligger etter game_over loop
-                        self.game_over = False  
+                        self.game_over = False
+                        mixer.music.stop()  
 
             self.screen.fill(self.BLACK)
             self.screen.blit(self.game_over_text,(250,500))  # tegner tekst på skjerm. 
@@ -140,6 +145,8 @@ class game():
             pg.display.update()
         
         self.new()
+
+
  
 
 g = game() # her lages game classen, also starter spill.

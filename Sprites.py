@@ -35,9 +35,10 @@ class player(pg.sprite.Sprite):
         self.range_direction_y = 1
         self.pew_speed = 4
         self.last_healing = 0
-        self.healing_timer = 500
-        self.healing_count = 500
+        self.healing_timer = 10000
+        self.healing_count = 0
         self.score = 0
+        self.healing_count_text = 0
 
 
     def update(self):
@@ -112,8 +113,10 @@ class player(pg.sprite.Sprite):
         
         now = pg.time.get_ticks()
         self.healing_count = now - self.last_healing
-        if self.healing_count > 500:
-            self.healing_count = ("Healing is ready")
+        if self.healing_count > 10000:
+            self.healing_count_text = ("Healing is ready")
+        if self.healing_count < 10000:
+            self.healing_count_text = ("Healing is not ready")
 
 
 
